@@ -1,39 +1,38 @@
 <template>
   <v-container>
     <v-card>
-      <v-toolbar
-          color="primary"
-      >
-        <v-toolbar-title>User Profile</v-toolbar-title>
-      </v-toolbar>
-      <div class="d-flex flex-row">
-        <v-tabs
-            v-model="tab"
-            direction="vertical"
-            color="primary"
-        >
-          <v-tab value="option-1">
-            <v-icon start>
-              mdi-account
-            </v-icon>
-            Customer Orders
-          </v-tab>
-          <v-tab value="option-2">
-            <v-icon start>
-              mdi-lock
-            </v-icon>
-            Customer Address
-          </v-tab>
-        </v-tabs>
-        <v-window v-model="tab">
-          <v-window-item value="option-1">
-            <CustomerOrders/>
-          </v-window-item>
-          <v-window-item value="option-2">
-           <CustomerAddress/>
-          </v-window-item>
-        </v-window>
-      </div>
+      <v-tabs vertical v-model="tab">
+        <v-tab v-bind:key="tab.id" v-for="tab in tabs" class="justify-start">
+          <v-icon left>
+            {{ tab.icon }}
+          </v-icon>
+          {{ tab.name }}
+        </v-tab>
+        <v-tabs-items v-model="tab">
+          <v-tab-item key="1"
+          >
+            <v-card
+                color="basil"
+                flat
+            >
+              <v-card-text>
+                <CustomerOrders :orders="customer.orders"/>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item key="2"
+          >
+            <v-card
+                color="basil"
+                flat
+            >
+              <v-card-text>
+                <CustomerAddress :addresses="customer.addresses"/>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-tabs>
     </v-card>
   </v-container>
 </template>
@@ -44,9 +43,24 @@ import CustomerOrders from "@/packages/User/components/CustomerOrders.vue";
 
 export default {
   name: "CustomerTabs",
-  components: {CustomerOrders, CustomerAddress},
+  props: {
+    customer:{}
+  },
+  components: {CustomerAddress, CustomerOrders},
   data: () => ({
     tab: 'option-1',
+    tabs:[
+      {
+        id:1,
+        name:"Orders",
+        icon:"mdi-clipboard-file"
+      },
+      {
+        id:2,
+        name:"Address",
+        icon:"mdi-clipboard-check-outline"
+      },
+    ]
   }),
 }
 </script>

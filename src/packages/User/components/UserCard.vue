@@ -119,7 +119,10 @@
       <AddressCardDialog :customer="customer" :dialog="addAddress" @CloseAddressDialog="closeAddressDialog"/>
       <!--Address card-->
       <!--customer order and addresses-->
-      <CustomerTabs/>
+      <div v-if="isView">
+        <v-divider/>
+        <CustomerTabs :customer="customer" />
+      </div>
       <!--customer order and addresses-->
     </v-card>
   </v-container>
@@ -133,7 +136,10 @@ import CustomerTabs from "@/packages/User/components/CustomerTabs.vue";
 
 export default {
   name: "UserCard",
-  components: {CustomerTabs, AddressCardDialog},
+  components: {
+    CustomerTabs,
+    AddressCardDialog
+  },
   beforeRouteEnter(to,from,next){
     next(v=>{
       if (to.params.code) {
