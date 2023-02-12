@@ -1,0 +1,22 @@
+{
+  "name": "@bikebukaltd/auth-service",
+  "version": "1.0.0",
+  "description": "Bikebuka Authentication",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Bikebuka, Authentication, Auth"
+  ],
+  "author": "Miller Juma",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bikebuka/auth-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bikebuka/auth-service/issues"
+  },
+  "homepage": "https://github.com/bikebuka/auth-service#readme"
+}
