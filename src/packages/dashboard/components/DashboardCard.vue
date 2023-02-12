@@ -18,7 +18,7 @@
               </v-toolbar>
 
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col cols="12" sm="3">
 
               <v-card class="cardOr mx-2 rounded-xl mt-n7" elevation="16">
                 <v-row>
@@ -37,7 +37,7 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
-                  <v-col cols="12" sm="4">
+                  <v-col cols="12" sm="3">
                     <v-avatar size="100" class="ml-n10 mt-6" tile>
                       <v-icon x-large>mdi-cart-check</v-icon>
                     </v-avatar>
@@ -46,7 +46,7 @@
               </v-card>
 
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col cols="12" sm="3">
               <v-card class="cardVr mx-2 rounded-xl mt-n7" elevation="16">
                 <v-row>
                   <v-col cols="12" sm="8">
@@ -58,9 +58,9 @@
                           </v-btn>
                         </div>
                         <v-list-item-title class="headline mb-1 white--text">
-                          {{statistics.available_vehicles}}
+                          {{statistics.total_loading_orders}}
                         </v-list-item-title>
-                        <v-list-item-subtitle class="white--text">Total Vehicles Available</v-list-item-subtitle>
+                        <v-list-item-subtitle class="white--text">Total Loading Orders</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
@@ -73,7 +73,7 @@
               </v-card>
 
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col cols="12" sm="3">
               <v-card class="cardR mx-2 rounded-xl mt-n7" elevation="16">
                 <v-row>
                   <v-col cols="12" sm="8">
@@ -85,9 +85,36 @@
                           </v-btn>
                         </div>
                         <v-list-item-title class="headline mb-1 white--text">
-                          {{statistics.total_customers}}
+                          {{statistics.total_dispatched_orders}}
                         </v-list-item-title>
-                        <v-list-item-subtitle class="white--text">Total Solutech Customers</v-list-item-subtitle>
+                        <v-list-item-subtitle class="white--text">Total Orders Dispatched</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                  <v-col cols="12" sm="4">
+                    <v-avatar size="100" class="ml-n10 mt-6" tile>
+                      <v-icon x-large>mdi-account-multiple-check-outline</v-icon>
+                    </v-avatar>
+                  </v-col>
+                </v-row>
+              </v-card>
+
+            </v-col>
+            <v-col cols="12" sm="3">
+              <v-card class="cardR mx-2 rounded-xl mt-n7" elevation="16">
+                <v-row>
+                  <v-col cols="12" sm="8">
+                    <v-list-item three-line>
+                      <v-list-item-content>
+                        <div class="mb-4">
+                          <v-btn tile fab color="orange" elevation="0">
+                            <v-icon color="">fas fa-lira-sign</v-icon>
+                          </v-btn>
+                        </div>
+                        <v-list-item-title class="headline mb-1 white--text">
+                          {{statistics.total_delivered_orders}}
+                        </v-list-item-title>
+                        <v-list-item-subtitle class="white--text">Total Orders Delivered</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
@@ -151,15 +178,56 @@
               {{item.status}}
             </span>
                 </template>
-                <!--END status-->
-                <!--BEGIN action-->
-<!--                <template v-slot:item.action="item">-->
-<!--                  <v-btn @click="redirectToCard(item)" small depressed rounded color="success"><v-icon>mdi-eye</v-icon>view</v-btn>-->
-<!--                </template>-->
-                <!--END action-->
               </v-data-table>
             </v-col>
             <v-col cols="12" sm="4">
+              <v-card flat>
+                <v-card-subtitle>Fleet & Customers</v-card-subtitle>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-card>
+                        <v-card-text>
+                          <div>
+                            <h3>Total Available Vehicles</h3>
+                          </div>
+                          <p class="pt-5">{{ statistics.total_available_vehicles }}</p>
+                        </v-card-text>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-card>
+                        <v-card-text>
+                          <div>
+                            <h3>Total Loading Vehicles</h3>
+                          </div>
+                          <p class="pt-5">{{ statistics.total_loading_vehicles }}</p>
+                        </v-card-text>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-card>
+                        <v-card-text>
+                          <div>
+                            <h3>Vehicles On Transit</h3>
+                          </div>
+                          <p class="pt-5">{{ statistics.total_on_transit_vehicles }}</p>
+                        </v-card-text>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-card>
+                        <v-card-text>
+                          <div>
+                            <h3>Total Customers</h3>
+                          </div>
+                          <p class="pt-5">{{ statistics.total_customers }}</p>
+                        </v-card-text>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
               <v-card class=" mx-2 rounded-xl" elevation="8" color="teal">
                 <v-toolbar flat color="rgba(0,0,0,0)" dark>
                   <v-toolbar-title>Recent Customers</v-toolbar-title>
@@ -290,12 +358,6 @@ export default {
           align: '',
           sortable: true,
           value: 'status'
-        },
-        {
-          text: 'Actions',
-          align: '',
-          sortable: true,
-          value: 'action'
         },
       ],
       //customer header
