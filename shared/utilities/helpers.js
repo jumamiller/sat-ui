@@ -9,7 +9,7 @@ class Helpers {
         let str=atob(value)
         return str.replace(AlgorithmKey,'');
     }
-    uploadImage(fileInput) {
+    async uploadImage(fileInput) {
         if (fileInput) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader()

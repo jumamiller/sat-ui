@@ -38,7 +38,7 @@
           <!--phone_number-->
           <!--nationality-->
           <template v-slot:item.fleet="{item}">
-            <span>{{item.fleet.registration_number}} </span>
+            <span>{{item.fleet? item.fleet.registration_number:'Unassigned'}} </span>
           </template>
           <!--nationality-->
           <!--document_type-->
@@ -74,31 +74,72 @@
     >
       <template>
         <v-card>
-          <v-toolbar color="primary" dark>Add New Customer</v-toolbar>
+          <v-toolbar color="primary" dark>Add New Driver</v-toolbar>
           <v-card-text>
-            <v-alert>To add new customer, they have to registered as users. If you dont see the customer to add, register them first.</v-alert>
+            <v-alert>To add new driver, they have to registered as users. If you dont see the driver to add, register them first.</v-alert>
             <v-divider class="mt-3"/>
             <div>
-              <v-form v-model="isValid" ref="CustomerForm">
-                <v-select
-                    label="Select User To Add*"
-                    v-model="formData.user_id"
-                    prepend-icon="mdi-account"
-                    dense
-                    required
-                    @copy.prevent
-                    @paste.prevent
-                    :rules="[rules.required]"
-                    :items="users"
-                    :item-text="item=>item.first_name"
-                    :item-value="item=>item.id"
-                ></v-select>
+              <v-form v-model="isValid" ref="DriverForm">
+               <v-row class="mt-5">
+                 <v-col cols="12" md="6">
+                   <v-select
+                       label="Select User To Add*"
+                       v-model="formData.user_id"
+                       prepend-icon="mdi-account"
+                       dense
+                       required
+                       @copy.prevent
+                       @paste.prevent
+                       :rules="[rules.required]"
+                       :items="users"
+                       :item-text="item=>item.first_name+' ' +item.last_name"
+                       :item-value="item=>item.id"
+                   ></v-select>
+                 </v-col>
+                 <v-col cols="12" md="6" class="mt-n3">
+                   <v-text-field
+                       label="License Number*"
+                       required
+                       :rules="[rules.required]"
+                       v-model="formData.license_number"
+                   ></v-text-field>
+                 </v-col>
+                 <v-col cols="12" md="6" class="mt-n4">
+                   <v-text-field
+                       label="License Expiration Date*"
+                       required
+                       type="date"
+                       :rules="[rules.required]"
+                       v-model="formData.expiration_date"
+                   ></v-text-field>
+                 </v-col>
+                 <v-col cols="12" md="6">
+                   <v-select
+                       label="License Status"
+                       v-model="formData.status"
+                       dense
+                       required
+                       @copy.prevent
+                       @paste.prevent
+                       :rules="[rules.required]"
+                       :items="statuses"
+                       :item-text="item=>item.name"
+                       :item-value="item=>item.value"
+                   ></v-select>
+                 </v-col>
+                 <v-col cols="12" md="12">
+                   <v-file-input
+                       @change="uploadLicense"
+                       label="Upload License"
+                   ></v-file-input>
+                 </v-col>
+               </v-row>
               </v-form>
             </div>
           </v-card-text>
           <v-card-actions class="justify-end">
             <v-btn color="error" text @click="dialog = false">Close</v-btn>
-            <v-btn color="success" small @click="saveCustomer">Submit</v-btn>
+            <v-btn color="success" small @click="saveDriver">Submit</v-btn>
           </v-card-actions>
         </v-card>
       </template>
@@ -108,8 +149,9 @@
 </template>
 
 <script>
-import { VueEditor } from 'vue2-editor'
+import {VueEditor} from 'vue2-editor'
 import helpers from "../../../../shared/utilities/helpers";
+
 export default {
   name: "Drivers",
   // eslint-disable-next-line vue/no-unused-components
@@ -124,7 +166,11 @@ export default {
     dialog: false,
     isValid: false,
     formData:{
-      user_id:"",
+      user_id:2,
+      license_number:"",
+      expiration_date:"",
+      status:"",
+      license_file_path:""
     },
     rules: {
       required: value => !!value || 'Required!',
@@ -191,14 +237,25 @@ export default {
         value: 'action'
       },
     ],
+    statuses:[
+      {
+        name:"Active",
+        value:"ACTIVE"
+      },
+      {
+        name:"Inactive",
+        value:"INACTIVE"
+      }
+    ]
   }),
   computed:{
     drivers(){
       return this.$store.getters['UserManagement/UserGetter']("drivers")
     },
     users(){
+      //filter users who are not admins/customers and not drivers yet
       return this.$store.getters['UserManagement/UserGetter']("users")
-          .filter(el=>el.roles[0].name==='CLIENT' && el.customer===null)
+          .filter(el=>el.roles[0].name==='CLIENT' && el.driver===null)
     }
   },
   methods: {
@@ -210,23 +267,30 @@ export default {
     },
 
     //
-    saveCustomer() {
+    saveDriver() {
       if (!this.isValid) {
-        this.$refs.CustomerForm.validate()
+        this.$refs.DriverForm.validate()
       }
       else{
         //confirm
         this.$confirm.show({
           title: "Are you Sure?",
-          text: `You're about to add the user as customer`,
+          text: `You're about to add the user as driver`,
           acceptLabel: "Yes, I'm sure",
           onConfirm: ()=>{
-            this.$store.dispatch('UserManagement/addCustomer', { ...this.formData});
+            this.$store.dispatch('UserManagement/saveDriver', { ...this.formData});
             this.dialog=false
           },
         })
       }
     },
+    /**
+     * File as Base64
+     * @param file
+     */
+    async uploadLicense(file) {
+      this.formData.license_file_path=await helpers.uploadImage(file)
+    }
   }
 }
 </script>
