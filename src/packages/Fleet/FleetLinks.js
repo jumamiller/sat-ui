@@ -15,7 +15,7 @@ export default {
             value: 0,
         },
         {
-            to: "/dashboard/fleet-management/customers",
+            to: "/dashboard/fleet-management/card",
             order: 3,
             icon: "mdi-plus-box-multiple",
             title: "Add Vehicle",

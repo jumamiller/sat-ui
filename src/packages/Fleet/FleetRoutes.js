@@ -15,9 +15,9 @@ const FleetRoutes =[
                 meta: { middleware: [Auth]}
             },
             {
-                path: 'fleet/card/:code?',
+                path: 'card/:code?',
                 component: FleetCard,
-                name: "UserCard",
+                name: "FleetCard",
                 meta: { middleware: [Auth]}
             },
         ]

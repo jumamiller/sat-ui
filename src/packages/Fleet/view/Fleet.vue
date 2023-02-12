@@ -150,7 +150,7 @@ export default {
     },
     //
     redirectToCard(){
-      this.$router.push({name:"UserCard"})
+      this.$router.push({name:"FleetCard"})
     },
   }
 }

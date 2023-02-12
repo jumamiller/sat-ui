@@ -1,12 +1,13 @@
 import call from "../../../shared/service/http";
 import {EventBus} from "../../../shared/utilities/event-bus";
-import AuthConstants from "@/packages/auth/authConstants";
 import FleetConstants from "@/packages/Fleet/FleetConstants";
+import UserConstants from "@/packages/User/UserConstants";
 
 export default {
     namespaced: true,
     state: {
         fleet: [],
+        drivers: [],
     },
     mutations: {
         MUTATE: (state, payload) => {
@@ -48,15 +49,39 @@ export default {
          */
         addFleet({commit},payload) {
             commit("Dashboard/SET_LOADING",true,{root:true})
-            call('post', AuthConstants.REGISTER,payload)
+            call('post', FleetConstants.FLEET,payload)
                 .then(res=> {
                     commit("Dashboard/SET_LOADING",false,{root:true})
                     if (res.data.success) {
                         EventBus.$emit("ApiSuccess", res.data.message);
                         //
                         setTimeout(()=>{
-                            window.location.href="/dashboard/user-management/listing"
+                            window.location.href="/dashboard/fleet-management/listing"
                         },1500)
+                    }
+                    else{
+                        EventBus.$emit("ApiError", res.data.message);
+                    }
+                })
+                .catch(err=>{
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    EventBus.$emit("ApiError", err.response.data.message);
+                })
+        },
+        /**
+         * Drivers
+         * @param commit
+         */
+        getDrivers({commit}) {
+            commit("Dashboard/SET_LOADING",true,{root:true})
+            call('get', UserConstants.DRIVERS)
+                .then(res=> {
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    if (res.data.success) {
+                        commit("MUTATE", {
+                            state: "drivers",
+                            data: res.data.data.data,
+                        });
                     }
                     else{
                         EventBus.$emit("ApiError", res.data.message);
