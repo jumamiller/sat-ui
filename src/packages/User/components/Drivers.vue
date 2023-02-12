@@ -230,12 +230,12 @@ export default {
         sortable: true,
         value: 'status'
       },
-      {
-        text: 'Actions',
-        align: '',
-        sortable: true,
-        value: 'action'
-      },
+      // {
+      //   text: 'Actions',
+      //   align: '',
+      //   sortable: true,
+      //   value: 'action'
+      // },
     ],
     statuses:[
       {

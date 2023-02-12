@@ -25,7 +25,7 @@ export default {
         {
             to: "/dashboard/user-management/drivers",
             order: 3,
-            icon: "mdi-account-group",
+            icon: "mdi-car-back",
             title: "Drivers",
             disabled: false,
             value: 0,

@@ -18,6 +18,7 @@ import appAlert from "@/plugins/appAlert";
 import Dashboard from "@/packages/dashboard";
 //
 import User from "@/packages/User";
+import Fleet from "@/packages/Fleet";
 
 Vue.config.productionTip = false
 
@@ -32,10 +33,12 @@ const options = {
   store,
   router,
 }
-//dashboard
+//install dashboard
 Vue.use(Dashboard, options)
-//fixed assets
+//install users
 Vue.use(User, options)
+//install fleet
+Vue.use(Fleet, options)
 //
 new Vue({
   router,
