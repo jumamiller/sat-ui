@@ -16,6 +16,11 @@
           <template v-slot:item.id="{index}">
             <span>{{index+1}}</span>
           </template>
+          <!--Created On-->
+          <template v-slot:item.created_at="{item}">
+            <span>{{ helpers().formatDate(item.created_at) }} </span>
+          </template>
+          <!--Created On-->
           <!--full name-->
           <template v-slot:item.name="{item}">
             <span>{{item.first_name}} {{item.middle_name}} {{item.last_name}}</span>
@@ -72,6 +77,13 @@ export default {
         sortable: true,
         value: 'id'
       },
+      {
+        text: 'Created On',
+        align: '',
+        sortable: true,
+        value: 'created_at'
+      },
+
       {
         text: 'Full Name',
         align: '',
@@ -134,24 +146,12 @@ export default {
     }
   },
   methods: {
+    helpers() {
+      return helpers
+    },
     //
     redirectToCard(){
-      this.$router.push({name:"FixedAssetCard"})
-    },
-    //
-    redirectToCardInfo(code){
-      this.$router.push({name:"FixedAssetCardInfo",params:{code}})
-    },
-    //
-    save() {
-      this.formData.description=helpers.removeTags(this.formData.description);
-      if (!this.isValid) {
-        this.$refs.publicationForm.validate()
-      }
-      else{
-        this.$store.dispatch('Project/project', { ...this.formData});
-        this.dialog=false
-      }
+      this.$router.push({name:"UserCard"})
     },
   }
 }

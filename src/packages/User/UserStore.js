@@ -1,6 +1,7 @@
 import call from "../../../shared/service/http";
 import UserConstants from "@/packages/User/UserConstants";
 import {EventBus} from "../../../shared/utilities/event-bus";
+import AuthConstants from "@/packages/auth/authConstants";
 
 export default {
     namespaced: true,
@@ -31,6 +32,32 @@ export default {
                             state: "users",
                             data: res.data.data.data,
                         });
+                    }
+                    else{
+                        EventBus.$emit("ApiError", res.data.message);
+                    }
+                })
+                .catch(err=>{
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    EventBus.$emit("ApiError", err.response.data.message);
+                })
+        },
+        /**
+         *
+         * @param commit
+         * @param payload
+         */
+        addUser({commit},payload) {
+            commit("Dashboard/SET_LOADING",true,{root:true})
+            call('post', AuthConstants.REGISTER,payload)
+                .then(res=> {
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    if (res.data.success) {
+                        EventBus.$emit("ApiSuccess", res.data.message);
+                        //
+                        setTimeout(()=>{
+                            window.location.href="/dashboard/user-management/listing"
+                        },1500)
                     }
                     else{
                         EventBus.$emit("ApiError", res.data.message);

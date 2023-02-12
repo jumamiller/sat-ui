@@ -16,22 +16,45 @@
           <template v-slot:item.id="{index}">
             <span>{{index+1}}</span>
           </template>
+          <!--Created On-->
+          <template v-slot:item.created_on="{item}">
+            <span>{{ helpers().formatDate(item.created_at) }} </span>
+          </template>
+          <!--Created On-->
           <!--full name-->
           <template v-slot:item.name="{item}">
-            <span>{{item.first_name}} {{item.middle_name}} {{item.last_name}}</span>
+            <span>{{item.user.first_name}} {{item.user.middle_name}} {{item.user.last_name}}</span>
           </template>
           <!--full name-->
-          <!--Begin roles-->
-          <template v-slot:item.roles="{item}">
-            <span><v-icon size="medium" :color="item.roles[0].name === 'ADMIN' ? 'success' : 'error'">mdi-circle-double</v-icon>
-              {{item.roles[0].name}}
-            </span>
+          <!--EMail-->
+          <template v-slot:item.email="{item}">
+            <span>{{item.user.email}} </span>
           </template>
-          <!--END Roles-->
+          <!--email-->
+          <!--phone_number-->
+          <template v-slot:item.phone_number="{item}">
+            <span>{{item.user.phone_number}} </span>
+          </template>
+          <!--phone_number-->
+          <!--nationality-->
+          <template v-slot:item.nationality="{item}">
+            <span>{{item.user.nationality}} </span>
+          </template>
+          <!--nationality-->
+          <!--document_type-->
+          <template v-slot:item.document_type="{item}">
+            <span>{{item.user.document_type}} </span>
+          </template>
+          <!--document_type-->
+          <!--document_number-->
+          <template v-slot:item.document_number="{item}">
+            <span>{{item.user.document_number}} </span>
+          </template>
+          <!--document_number-->
           <!--Begin roles-->
           <template v-slot:item.status="{item}">
-            <span><v-icon size="medium" :color="item.status === 'ACTIVE' ? 'success' : 'error'">mdi-circle-double</v-icon>
-              {{item.status}}
+            <span><v-icon size="medium" :color="item.user.status === 'ACTIVE' ? 'success' : 'error'">mdi-circle-double</v-icon>
+              {{item.user.status}}
             </span>
           </template>
           <!--END Roles-->
@@ -78,16 +101,16 @@ export default {
         value: 'id'
       },
       {
+        text: 'Joined On',
+        align: '',
+        sortable: true,
+        value: 'created_on'
+      },
+      {
         text: 'Full Name',
         align: '',
         sortable: true,
         value: 'name'
-      },
-      {
-        text: 'Username',
-        align: '',
-        sortable: true,
-        value: 'username'
       },
       {
         text: 'Email',
@@ -139,6 +162,9 @@ export default {
     }
   },
   methods: {
+    helpers() {
+      return helpers
+    },
     //
     save() {
       this.formData.description=helpers.removeTags(this.formData.description);
