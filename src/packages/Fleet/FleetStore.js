@@ -95,6 +95,33 @@ export default {
                 })
         },
         /**
+         *
+         * @param commit
+         * @param dispatch
+         * @param payload
+         */
+        updateFleet({commit,dispatch},payload) {
+            commit("Dashboard/SET_LOADING",true,{root:true})
+            call('patch', FleetConstants.UPDATE_FLEET(payload),payload)
+                .then(res=> {
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    if (res.data.success) {
+                        EventBus.$emit("ApiSuccess", res.data.message);
+                        //
+                        setTimeout(()=>{
+                            dispatch("getFleetDetails",payload.id)
+                        },1500)
+                    }
+                    else{
+                        EventBus.$emit("ApiError", res.data.message);
+                    }
+                })
+                .catch(err=>{
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    EventBus.$emit("ApiError", err.response.data.message);
+                })
+        },
+        /**
          * Drivers
          * @param commit
          */

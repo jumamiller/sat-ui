@@ -1,13 +1,15 @@
 <template>
   <v-card>
+    <v-card-title>Fleet Driver Details</v-card-title>
     <v-card-text>
-     <v-row>
+     <v-row v-if="driver">
        <v-col cols="12" md="6">Joined On: {{helpers().formatDate(driver.created_at)}}</v-col>
        <v-col cols="12" md="6">Full Name: {{driver.user.first_name}} {{driver.user.last_name}}</v-col>
        <v-col cols="12" md="6">Driver License: {{driver.license_number}}</v-col>
        <v-col cols="12" md="6">License Expiry: {{helpers().formatDate(driver.expiration_date)}}</v-col>
        <v-col cols="12" md="6">License Status: {{(driver.status)}}</v-col>
      </v-row>
+      <v-card-text v-else>No Driver Details Found</v-card-text>
     </v-card-text>
   </v-card>
 </template>

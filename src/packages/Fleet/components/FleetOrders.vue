@@ -20,7 +20,7 @@
         </template>
         <!--Created On-->
         <template v-slot:item.status="{item}">
-            <span><v-icon size="medium" :color="item.status === 'DISPATCHED' ? 'success' : 'error'">mdi-circle-double</v-icon>
+            <span><v-icon size="medium" :color="item.status === 'DELIVERED' ? 'success' : 'error'">mdi-circle-double</v-icon>
               {{item.status}}
             </span>
         </template>

@@ -4,7 +4,7 @@
       <v-card-title>
         <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
-        <v-btn class="primary" @click="save"><v-icon>mdi-send</v-icon>
+        <v-btn class="primary" @click="isView ? updateFleet() : save()"><v-icon>mdi-send</v-icon>
           {{ isView? 'Save' :'Submit' }}</v-btn>
       </v-card-title>
       <v-divider/>
@@ -178,6 +178,18 @@ export default {
       }
       else{
         this.$store.dispatch('FleetManagement/addFleet', { ...this.formData});
+        this.dialog=false
+      }
+    },
+    /**
+     * Update fleet status
+     */
+    updateFleet() {
+      if (!this.isValid) {
+        this.$refs.FleetForm.validate()
+      }
+      else{
+        this.$store.dispatch('FleetManagement/updateFleet', { ...this.formData});
         this.dialog=false
       }
     },
