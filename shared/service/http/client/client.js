@@ -22,7 +22,7 @@ const client = axios.create(config)
  */
 const authInterceptor = config => {
   config.headers.Authorization = `Bearer ${AuthService.token}`
-  config.headers.common.Accept = 'Application/json'
+  // config.headers.common.Accept = 'Application/json'
     //disable for Django
   // config.headers['Access-Control-Allow-Origin'] = '*'
   return config
