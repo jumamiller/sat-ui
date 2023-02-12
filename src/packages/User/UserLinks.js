@@ -15,10 +15,10 @@ export default {
             value: 0,
         },
         {
-            to: "/dashboard/user-management/hand-overs",
+            to: "/dashboard/user-management/customers",
             order: 3,
-            icon: "mdi-handshake",
-            title: "HandOvers",
+            icon: "mdi-account-group",
+            title: "Customers",
             disabled: false,
             value: 0,
         }

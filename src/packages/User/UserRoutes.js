@@ -1,7 +1,7 @@
 import DashboardLayout from "@/packages/dashboard/views/DashboardLayout";
 import {Auth} from "@/packages/auth";
 import User from "@/packages/User/view/User";
-import HandOvers from "@/packages/User/components/HandOvers.vue";
+import Customers from "@/packages/User/components/Customers.vue";
 const UserRoutes =[
     {
         path: '/dashboard/user-management',
@@ -14,9 +14,9 @@ const UserRoutes =[
                 meta: { middleware: [Auth]}
             },
             {
-                path: 'hand-overs',
-                component: HandOvers,
-                name: "HandOver",
+                path: 'customers',
+                component: Customers,
+                name: "Customers",
                 meta: { middleware: [Auth]}
             },
         ]

@@ -1,6 +1,7 @@
 import AuthConstants from "./authConstants";
 import AuthService from "./authService";
 import call from "../../../shared/service/http";
+import {EventBus} from "../../../shared/utilities/event-bus";
 
 export default {
     namespaced: true,
@@ -32,12 +33,12 @@ export default {
             call('post', AuthConstants.requestCredentials, data)
                 .then(res => {
                     res.data === null
-                        ? Event.$emit('ApiWarning', `${res.data.message}!`)
-                        : Event.$emit('ApiSuccess', res.data.message + ' Your credentials will be sent to your email')
+                        ? EventBus.$emit('ApiWarning', `${res.data.message}!`)
+                        : EventBus.$emit('ApiSuccess', res.data.message + ' Your credentials will be sent to your email')
                     commit('SET_LOADING', false, { root: true })
                 })
                 .catch((error) => {
-                    Event.$emit('ApiError', `${error.response.data.message}!`)
+                    EventBus.$emit('ApiError', `${error.response.data.message}!`)
                     commit('SET_LOADING', false, { root: true })
                 })
         },
@@ -47,25 +48,28 @@ export default {
          * @param data
          */
         login: (p, data) => {
-            Event.$emit('submitting',false)
+            EventBus.$emit('submitting',false)
             call("post", AuthConstants.login, data)
                 .then(res => {
-                    if (res.data.status) {
+                    if (res.data.success) {
+                        //save to localstorage
                         AuthService.login(res.data);
-                        Event.$emit('loggedIn',true)
-                        Event.$emit("ApiSuccess", ` Welcome back ${res.data?.staff?.user?.last_name}`);
-                        //
+                        //emit logged in event
+                        EventBus.$emit('loggedIn',true)
+                        //emit toastr
+                        EventBus.$emit("ApiSuccess", ` Welcome back ${res.data?.data?.username}`);
+                        //redirect to dashboard after 15ms
                         setTimeout(()=>{
                             window.location.href="/"
                         },1500)
                     } else{
-                        Event.$emit('loggedIn',false)
-                        Event.$emit("ApiError",res.data.message);
+                        EventBus.$emit('loggedIn',false)
+                        EventBus.$emit("ApiError",res.data.message);
                     }
                 })
                 .catch( (err) => {
-                    Event.$emit('loggedIn',false)
-                    Event.$emit("ApiError",err?.response?.data?.message || 'Something went wrong');
+                    EventBus.$emit('loggedIn',false)
+                    EventBus.$emit("ApiError",err?.response?.data?.message || 'Something went wrong');
                 });
         },
         /**
@@ -77,10 +81,10 @@ export default {
             commit("SET_LOADING", false, { root: true });
             call('post', AuthConstants.sendResetPasswordLink, data)
                 .then((res) => {
-                    Event.$emit('ApiSuccess', res.data.message)
+                    EventBus.$emit('ApiSuccess', res.data.message)
                 })
                 .catch((error) => {
-                    Event.$emit('ApiError', error.response.data.message)
+                    EventBus.$emit('ApiError', error.response.data.message)
                 })
         },
         /**
@@ -92,13 +96,13 @@ export default {
             commit('SET_LOADING', false, { root: true })
             call('post', AuthConstants.setPassword, data)
                 .then((res) => {
-                    Event.$emit('ApiSuccess', `${res.data.message}, you can now login`)
+                    EventBus.$emit('ApiSuccess', `${res.data.message}, you can now login`)
                     setTimeout(() => {
                         AuthService.login(res.data.data)
                     }, 1000)
                 })
                 .catch(() => {
-                    Event.$emit('ApiError', 'You do not have permission to do this')
+                    EventBus.$emit('ApiError', 'You do not have permission to do this')
                 })
         },
         /**
@@ -127,7 +131,7 @@ export default {
             call("post", AuthConstants.logout)
                 .then(() => {
                     commit("SET_LOADING", false, { root: true });
-                    Event.$emit("ApiSuccess", `You have successfully signed out! ${AuthService.user.name}!`);
+                    EventBus.$emit("ApiSuccess", `You have successfully signed out! ${AuthService.user.name}!`);
                     setTimeout(() => {
                         AuthService.logout();
                     }, 2000);

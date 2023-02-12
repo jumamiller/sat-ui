@@ -9,18 +9,16 @@
         width="350"
         color="aside"
         dark
-        style="font-family: 'PT Sans Caption', sans-serif"
         class="fill-height"
     >
       <v-card flat color="aside" class="pa-2" width="100%">
         <div class="d-flex flex-column">
-          <v-avatar class="align-self-center" size="70">
-            <v-img
-                alt="Logo"
-                src="@/assets/images/logo.svg"
-                transition="scale-transition"
-            />
-          </v-avatar>
+          <v-img
+              alt="Logo"
+              width="100"
+              :src="('https://www.solutech.co.ke/wp-content/uploads/2020/10/Solutech-Official-Logo.svg')"
+              transition="scale-transition"
+          />
         </div>
 
         <v-card-subtitle

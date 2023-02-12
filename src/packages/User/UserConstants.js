@@ -1,3 +1,4 @@
 export default {
-    USERS: 'staff/'
+    USERS: 'users',
+    CUSTOMERS: 'customers',
 }

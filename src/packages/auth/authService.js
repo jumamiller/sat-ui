@@ -25,11 +25,11 @@ class AuthService {
     location.reload()
   }
 
-  login ({ access_token, staff }) {
-    window.localStorage.setItem(this.obj.token, access_token)
-    window.localStorage.setItem(this.obj.user, JSON.stringify(staff))
-    this.token = access_token
-    this.user = staff
+  login ({ token, data }) {
+    window.localStorage.setItem(this.obj.token, token)
+    window.localStorage.setItem(this.obj.user, JSON.stringify(data))
+    this.token = token
+    this.user = data
   }
 
   setUser (user) {

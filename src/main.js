@@ -17,7 +17,7 @@ import appAlert from "@/plugins/appAlert";
 //packages
 import Dashboard from "@/packages/dashboard";
 //
-import FixedAssets from "@/packages/FixedAssets";
+import User from "@/packages/User";
 
 Vue.config.productionTip = false
 
@@ -35,7 +35,7 @@ const options = {
 //dashboard
 Vue.use(Dashboard, options)
 //fixed assets
-Vue.use(FixedAssets, options)
+Vue.use(User, options)
 //
 new Vue({
   router,

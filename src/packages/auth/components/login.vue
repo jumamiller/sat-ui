@@ -33,13 +33,13 @@
         <v-card-text>
           <v-form v-model="isValid" ref="loginForm" @submit.prevent="login">
             <v-text-field
-                v-model="formData.username"
+                v-model="formData.email"
                 outlined
-                label="Username"
-                placeholder="johndoe"
+                label="Email Address"
+                placeholder="johndoe@example.com"
                 hide-details
                 class="mb-3"
-                :rules="[rules.username.required]"
+                :rules="[rules.email.required]"
             ></v-text-field>
 
             <v-text-field
@@ -47,7 +47,7 @@
                 outlined
                 :type="isPasswordVisible ? 'text' : 'password'"
                 label="Password"
-                :rules="[rules.password.required, rules.password.min]"
+                :rules="[rules.password.required]"
                 :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
                 hide-details
                 @click:append="isPasswordVisible = !isPasswordVisible"
@@ -55,7 +55,7 @@
 
             <div class="d-flex align-center justify-space-between flex-wrap">
               <v-checkbox
-                  label="Remember Me"
+                  label="Trust this Device?"
                   hide-details
                   class="me-3 mt-1"
               >
@@ -148,6 +148,7 @@ import {
 } from '@mdi/js'
 import {mapActions} from "vuex";
 import {appName} from "../../../environment";
+import {EventBus} from "../../../../shared/utilities/event-bus";
 
 export default {
   data() {
@@ -183,7 +184,7 @@ export default {
       socialLink,
 
       formData: {
-        username: '',
+        email: '',
         password: '',
       },
 
@@ -191,7 +192,7 @@ export default {
         password: {
           required: (value) => !!value || 'Password is Required.',
         },
-        username: {
+        email: {
           required: (value) => !!value || 'Email is Required.',
         }
       },
@@ -204,7 +205,7 @@ export default {
     }
   },
   mounted(){
-    Event.$on('loggedIn', value=> {
+    EventBus.$on('loggedIn', value=> {
       this.submitting = value;
     })
   },
