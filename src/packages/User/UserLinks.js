@@ -10,7 +10,7 @@ export default {
             to: "/dashboard/user-management/listing",
             order: 3,
             icon: "mdi-account",
-            title: "Users",
+            title: "Listing",
             disabled: false,
             value: 0,
         },
