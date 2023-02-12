@@ -4,14 +4,14 @@
       <v-card-title>
         <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
-        <v-btn @click="$router.push({name:'FleetCard'})" class="primary"><v-icon>mdi-plus</v-icon>Add New</v-btn>
+        <v-btn @click="$router.push({name:'OrderCard'})" class="primary"><v-icon>mdi-plus</v-icon>Make an Order</v-btn>
       </v-card-title>
       <v-spacer/>
       <v-divider/>
       <v-card-text>
         <v-data-table
             :headers="headers"
-            :items="fleet"
+            :items="orders"
         >
           <template v-slot:item.id="{index}">
             <span>{{index+1}}</span>
@@ -21,16 +21,16 @@
             <span>{{ helpers().formatDate(item.created_at) }} </span>
           </template>
           <!--Created On-->
-          <!--Begin roles-->
-          <template v-slot:item.driver="{item}">
+          <!--Begin total_price-->
+          <template v-slot:item.total_price="{item}">
             <span>
-              {{item.driver.user.first_name|| ''}} {{item.driver.user.last_name|| 'N/A'}}
+              {{helpers().formatCurrency(item.total_price|| '')}}
             </span>
           </template>
-          <!--END Roles-->
+          <!--END total_price-->
           <!--Begin status-->
           <template v-slot:item.status="{item}">
-            <span><v-icon size="medium" :color="item.status === 'IN_TRANSIT' ? 'success' : 'error'">mdi-circle-double</v-icon>
+            <span><v-icon size="medium" :color="item.status === 'DISPATCHED' ? 'success' : 'error'">mdi-circle-double</v-icon>
               {{item.status}}
             </span>
           </template>
@@ -47,15 +47,12 @@
 </template>
 
 <script>
-import { VueEditor } from 'vue2-editor'
 import helpers from "../../../../shared/utilities/helpers";
 export default {
-  name: "Fleet",
-  // eslint-disable-next-line vue/no-unused-components
-  components: { VueEditor },
+  name: "Order",
   beforeRouteEnter(to,from,next){
     next(v=>{
-      v.$store.dispatch('FleetManagement/getFleet');
+      v.$store.dispatch('OrderManagement/getOrders');
     })
   },
   data: () => ({
@@ -84,52 +81,22 @@ export default {
         value: 'created_at'
       },
       {
-        text: 'Name',
+        text: 'Order Number',
         align: '',
         sortable: true,
-        value: 'name'
+        value: 'order_number'
       },
       {
-        text: 'Registration Number',
+        text: 'Total Price',
         align: '',
         sortable: true,
-        value: 'registration_number'
-      },
-      {
-        text: 'Model',
-        align: '',
-        sortable: true,
-        value: 'model'
-      },
-      {
-        text: 'Manufacturer',
-        align: '',
-        sortable: true,
-        value: 'manufacturer'
-      },
-      {
-        text: 'Year',
-        align: '',
-        sortable: true,
-        value: 'year'
-      },
-      {
-        text: 'Capacity',
-        align: '',
-        sortable: true,
-        value: 'capacity'
+        value: 'total_price'
       },
       {
         text: 'Status',
         align: '',
         sortable: true,
         value: 'status'
-      },
-      {
-        text: 'Driver',
-        align: '',
-        sortable: true,
-        value: 'driver'
       },
       {
         text: 'Actions',
@@ -140,8 +107,8 @@ export default {
     ],
   }),
   computed:{
-    fleet(){
-      return this.$store.getters['FleetManagement/FleetGetter']("fleet")
+    orders(){
+      return this.$store.getters['OrderManagement/OrderGetter']("orders")
     }
   },
   methods: {
@@ -150,7 +117,7 @@ export default {
     },
     //
     redirectToCard({item}){
-      this.$router.push({name:"FleetCard",params:{code:this.helpers().encrypt(item.id)}})
+      this.$router.push({name:"OrderCard",params:{code:this.helpers().encrypt(item.id)}})
     },
   }
 }

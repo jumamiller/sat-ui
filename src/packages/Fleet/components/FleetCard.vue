@@ -23,6 +23,7 @@
               <v-text-field
                   label="Model"
                   required
+                  :rules="[rules.required]"
                   v-model="formData.model"
               ></v-text-field>
             </v-col>

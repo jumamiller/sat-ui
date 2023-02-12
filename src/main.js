@@ -19,6 +19,7 @@ import Dashboard from "@/packages/dashboard";
 //
 import User from "@/packages/User";
 import Fleet from "@/packages/Fleet";
+import Order from "@/packages/Order";
 
 Vue.config.productionTip = false
 
@@ -39,6 +40,8 @@ Vue.use(Dashboard, options)
 Vue.use(User, options)
 //install fleet
 Vue.use(Fleet, options)
+//install order mgmt
+Vue.use(Order,options)
 //
 new Vue({
   router,
