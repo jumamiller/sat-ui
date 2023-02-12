@@ -3,6 +3,7 @@ import {Auth} from "@/packages/auth";
 import User from "@/packages/User/view/User";
 import Customers from "@/packages/User/components/Customers.vue";
 import UserCard from "@/packages/User/components/UserCard.vue";
+import Drivers from "@/packages/User/components/Drivers.vue";
 const UserRoutes =[
     {
         path: '/dashboard/user-management',
@@ -24,6 +25,12 @@ const UserRoutes =[
                 path: 'customers/card/:code?',
                 component: UserCard,
                 name: "UserCard",
+                meta: { middleware: [Auth]}
+            },
+            {
+                path: 'drivers',
+                component: Drivers,
+                name: "Drivers",
                 meta: { middleware: [Auth]}
             },
         ]

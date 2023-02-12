@@ -4,7 +4,7 @@
       <v-card-title>
         <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
-        <v-btn class="success" @click="addAddress=true"><v-icon>mdi-plus</v-icon> Add Address</v-btn>
+        <v-btn v-if="isView" class="success" @click="addAddress=true"><v-icon>mdi-plus</v-icon> Add Address</v-btn>
         &nbsp; &nbsp; &nbsp;
         <v-btn class="primary" @click="isView? save : save"><v-icon>mdi-send</v-icon>
           {{ isView? 'Save' :'Submit' }}</v-btn>

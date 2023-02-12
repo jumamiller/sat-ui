@@ -9,6 +9,7 @@ export default {
         users: [],
         customers: [],
         customer: {},
+        drivers:[]
     },
     mutations: {
         MUTATE: (state, payload) => {
@@ -135,6 +136,30 @@ export default {
                     if (res.data.success) {
                         commit("MUTATE", {
                             state: "customers",
+                            data: res.data.data.data,
+                        });
+                    }
+                    else{
+                        EventBus.$emit("ApiError", res.data.message);
+                    }
+                })
+                .catch(err=>{
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    EventBus.$emit("ApiError", err.response.data.message);
+                })
+        },
+        /**
+         * Drivers
+         * @param commit
+         */
+        getDrivers({commit}) {
+            commit("Dashboard/SET_LOADING",true,{root:true})
+            call('get', UserConstants.DRIVERS)
+                .then(res=> {
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    if (res.data.success) {
+                        commit("MUTATE", {
+                            state: "drivers",
                             data: res.data.data.data,
                         });
                     }

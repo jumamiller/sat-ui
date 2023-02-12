@@ -21,6 +21,14 @@ export default {
             title: "Customers",
             disabled: false,
             value: 0,
-        }
+        },
+        {
+            to: "/dashboard/user-management/drivers",
+            order: 3,
+            icon: "mdi-account-group",
+            title: "Drivers",
+            disabled: false,
+            value: 0,
+        },
     ],
 }
