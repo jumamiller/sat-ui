@@ -16,7 +16,7 @@
 import helpers from "../../../../shared/utilities/helpers";
 
 export default {
-  name: "FleetDriver",
+  name: "OrderDriver",
   methods: {
     helpers() {
       return helpers

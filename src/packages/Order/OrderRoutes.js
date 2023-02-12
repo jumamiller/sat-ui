@@ -17,7 +17,7 @@ const OrderRoutes =[
             {
                 path: 'card/:code?',
                 component: OrderCard,
-                name: "FleetCard",
+                name: "OrderCard",
                 meta: { middleware: [Auth]}
             },
         ]

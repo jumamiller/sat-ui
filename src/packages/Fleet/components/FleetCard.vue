@@ -153,7 +153,7 @@ export default {
       },
       {
         name:"On Transit",
-        value:"oN_TRANSIT"
+        value:"ON_TRANSIT"
       },
     ],
   }),

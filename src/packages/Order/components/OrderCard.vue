@@ -71,7 +71,7 @@
       <!--fleet order and driver-->
       <div v-if="isView">
         <v-divider/>
-        <FleetTab :fleet="fleet" />
+        <OrderTab :order="order" />
       </div>
       <!--fleet order and driver-->
     </v-card>
@@ -81,17 +81,17 @@
 <script>
 
 import helpers from "../../../../shared/utilities/helpers";
-import FleetTab from "@/packages/Fleet/components/FleetTab.vue";
+import OrderTab from "@/packages/Order/components/OrderTab.vue";
 
 export default {
   name: "FleetCard",
   components: {
-    FleetTab,
+    OrderTab,
   },
   beforeRouteEnter(to,from,next){
     next(v=>{
       if (to.params.code) {
-        v.$store.dispatch('FleetManagement/getFleetDetails',helpers.decrypt(to.params.code))
+        v.$store.dispatch('OrderManagement/getOrder',helpers.decrypt(to.params.code))
       }
       v.$store.dispatch('UserManagement/getCustomers')
       v.$store.dispatch('FleetManagement/getFleet')
@@ -146,6 +146,9 @@ export default {
     },
     customers(){
       return this.$store.getters['UserManagement/UserGetter']('customers')
+    },
+    order(){
+      return this.$store.getters['OrderManagement/OrderGetter']('order')
     }
   },
   methods: {

@@ -16,7 +16,7 @@
                 flat
             >
               <v-card-text>
-                <FleetDriver :driver="fleet.driver"/>
+                <OrderDriver :driver="order.fleet.driver"/>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -27,7 +27,7 @@
                 flat
             >
               <v-card-text>
-                <FleetOrders :orders="fleet.orders"/>
+                <OrderFleet :fleet="order.fleet"/>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -38,15 +38,15 @@
 </template>
 
 <script>
-import FleetDriver from "@/packages/Fleet/components/FleetDriver.vue";
-import FleetOrders from "@/packages/Fleet/components/FleetOrders.vue";
+import OrderDriver from "@/packages/Order/components/OrderDriver.vue";
+import OrderFleet from "@/packages/Order/components/OrderFleet.vue";
 
 export default {
-  name: "FleetTab",
+  name: "OrderTab",
   props: {
-    fleet:{}
+    order:{}
   },
-  components: {FleetOrders, FleetDriver},
+  components: {OrderFleet, OrderDriver},
   data: () => ({
     tab: 'option-1',
     tabs:[
@@ -57,7 +57,7 @@ export default {
       },
       {
         id:2,
-        name:"Orders",
+        name:"Vehicle",
         icon:"mdi-clipboard-check-outline"
       },
     ]
