@@ -4,8 +4,6 @@
       <v-card-title>
         <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
-        <v-btn v-if="isView" class="success" @click="addAddress=true"><v-icon>mdi-plus</v-icon> Add Address</v-btn>
-        &nbsp; &nbsp; &nbsp;
         <v-btn class="primary" @click="save"><v-icon>mdi-send</v-icon>
           {{ isView? 'Save' :'Submit' }}</v-btn>
       </v-card-title>
@@ -93,34 +91,30 @@
           </v-row>
         </v-form>
       </v-card-text>
-      <!--Address card-->
-      <AddressCardDialog :customer="customer" :dialog="addAddress" @CloseAddressDialog="closeAddressDialog"/>
-      <!--Address card-->
-      <!--customer order and addresses-->
+      <!--fleet order and driver-->
       <div v-if="isView">
         <v-divider/>
-        <CustomerTabs :customer="customer" />
+        <FleetTab :fleet="fleet" />
       </div>
-      <!--customer order and addresses-->
+      <!--fleet order and driver-->
     </v-card>
   </v-container>
 </template>
 
 <script>
 
-import AddressCardDialog from "@/packages/User/components/AddressCardDialog.vue";
-import CustomerTabs from "@/packages/User/components/CustomerTabs.vue";
+import helpers from "../../../../shared/utilities/helpers";
+import FleetTab from "@/packages/Fleet/components/FleetTab.vue";
 
 export default {
   name: "FleetCard",
   components: {
-    CustomerTabs,
-    AddressCardDialog
+    FleetTab,
   },
   beforeRouteEnter(to,from,next){
     next(v=>{
       if (to.params.code) {
-        // v.$store.dispatch('UserManagement/',helpers.decrypt(to.params.code))
+        v.$store.dispatch('FleetManagement/getFleetDetails',helpers.decrypt(to.params.code))
       }
       v.$store.dispatch('FleetManagement/getDrivers')
     })
@@ -135,7 +129,7 @@ export default {
     //
     dialog: false,
     formData: {
-      driver_id:2,
+      driver_id:"",
       name:"",
       registration_number:"",
       model:"",
@@ -168,8 +162,8 @@ export default {
     }
   },
   computed:{
-    customer(){
-      return this.$store.getters['UserManagement/UserGetter']('customer')
+    fleet(){
+      return this.$store.getters['FleetManagement/FleetGetter']('fleetDetails')
     },
     drivers(){
       return this.$store.getters['FleetManagement/FleetGetter']('drivers')
@@ -191,8 +185,8 @@ export default {
     }
   },
   watch: {
-    customer: function  (newValue){
-      this.formData = newValue.user
+    fleet: function  (newValue){
+      this.formData = newValue
     }
   }
 }

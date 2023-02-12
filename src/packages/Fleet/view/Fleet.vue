@@ -149,8 +149,8 @@ export default {
       return helpers
     },
     //
-    redirectToCard(){
-      this.$router.push({name:"FleetCard"})
+    redirectToCard({item}){
+      this.$router.push({name:"FleetCard",params:{code:this.helpers().encrypt(item.id)}})
     },
   }
 }
