@@ -4,7 +4,7 @@
       <v-card-title>
         <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
-        <v-btn class="primary"><v-icon>mdi-plus</v-icon>Add New</v-btn>
+        <v-btn class="primary" @click="dialog=true"><v-icon>mdi-plus</v-icon>Add New</v-btn>
       </v-card-title>
       <v-spacer/>
       <v-divider/>
@@ -59,13 +59,51 @@
           </template>
           <!--END Roles-->
           <!--BEGIN action-->
-          <template v-slot:item.action="">
-            <v-btn small depressed rounded color="success"><v-icon>mdi-eye</v-icon>View</v-btn>
+          <template v-slot:item.action="item">
+            <v-btn @click="redirectToCard(item)" small depressed rounded color="success"><v-icon>mdi-eye</v-icon>view</v-btn>
           </template>
           <!--END action-->
         </v-data-table>
       </v-card-text>
     </v-card>
+    <!--add customer dialog-->
+    <v-dialog
+        transition="dialog-bottom-transition"
+        max-width="600"
+        v-model="dialog"
+    >
+      <template>
+        <v-card>
+          <v-toolbar color="primary" dark>Add New Customer</v-toolbar>
+          <v-card-text>
+            <v-alert>To add new customer, they have to registered as users. If you dont see the customer to add, register them first.</v-alert>
+            <v-divider class="mt-3"/>
+           <div>
+            <v-form v-model="isValid" ref="CustomerForm">
+              <v-select
+                  label="Select User To Add*"
+                  v-model="formData.user_id"
+                  prepend-icon="mdi-account"
+                  dense
+                  required
+                  @copy.prevent
+                  @paste.prevent
+                  :rules="[rules.required]"
+                  :items="users"
+                  :item-text="item=>item.first_name"
+                  :item-value="item=>item.id"
+              ></v-select>
+            </v-form>
+           </div>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn color="error" text @click="dialog = false">Close</v-btn>
+            <v-btn color="success" small @click="saveCustomer">Submit</v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
+    <!--add customer dialog-->
   </v-container>
 </template>
 
@@ -79,16 +117,14 @@ export default {
   beforeRouteEnter(to,from,next){
     next(v=>{
       v.$store.dispatch('UserManagement/getCustomers');
+      v.$store.dispatch('UserManagement/users');
     })
   },
   data: () => ({
     dialog: false,
     isValid: false,
     formData:{
-      title:"",
-      description:"",
-      website_url:"",
-      attachment:""
+      user_id:"",
     },
     rules: {
       required: value => !!value || 'Required!',
@@ -159,21 +195,36 @@ export default {
   computed:{
     customers(){
       return this.$store.getters['UserManagement/UserGetter']("customers")
+    },
+    users(){
+      return this.$store.getters['UserManagement/UserGetter']("users")
+          .filter(el=>el.roles[0].name==='CLIENT' && el.customer===null)
     }
   },
   methods: {
     helpers() {
       return helpers
     },
+    redirectToCard({item}){
+      this.$router.push({name:'UserCard',params:{code:helpers.encrypt(item.id)}})
+    },
+
     //
-    save() {
-      this.formData.description=helpers.removeTags(this.formData.description);
+    saveCustomer() {
       if (!this.isValid) {
-        this.$refs.publicationForm.validate()
+        this.$refs.CustomerForm.validate()
       }
       else{
-        this.$store.dispatch('Project/project', { ...this.formData});
-        this.dialog=false
+        //confirm
+        this.$confirm.show({
+          title: "Are you Sure?",
+          text: `You're about to add the user as customer`,
+          acceptLabel: "Yes, I'm sure",
+          onConfirm: ()=>{
+            this.$store.dispatch('UserManagement/addCustomer', { ...this.formData});
+            this.dialog=false
+          },
+        })
       }
     },
   }

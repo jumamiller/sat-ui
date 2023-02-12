@@ -4,8 +4,12 @@
       <v-card-title>
         <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
-        <v-btn class="primary" @click="save"><v-icon>mdi-send</v-icon>Submit</v-btn>
+        <v-btn class="success" @click="addAddress=true"><v-icon>mdi-plus</v-icon> Add Address</v-btn>
+        &nbsp; &nbsp; &nbsp;
+        <v-btn class="primary" @click="isView? save : save"><v-icon>mdi-send</v-icon>
+          {{ isView? 'Save' :'Submit' }}</v-btn>
       </v-card-title>
+      <v-divider/>
       <v-card-text>
         <v-form v-model="isValid" ref="UserForm">
           <v-row>
@@ -98,7 +102,7 @@
               ></v-select>
             </v-col>
 
-            <v-col cols="12" sm="6" md="6" class="mt-n2">
+            <v-col cols="12" sm="6" md="6" class="mt-n2" v-if="!isView">
               <v-text-field
                   prepend-icon="mdi-account-lock"
                   label="Temporary Password*"
@@ -111,21 +115,40 @@
           </v-row>
         </v-form>
       </v-card-text>
+      <!--Address card-->
+      <AddressCardDialog :customer="customer" :dialog="addAddress" @CloseAddressDialog="closeAddressDialog"/>
+      <!--Address card-->
+      <!--customer order and addresses-->
+      <CustomerTabs/>
+      <!--customer order and addresses-->
     </v-card>
   </v-container>
 </template>
 
 <script>
 
+import helpers from "../../../../shared/utilities/helpers";
+import AddressCardDialog from "@/packages/User/components/AddressCardDialog.vue";
+import CustomerTabs from "@/packages/User/components/CustomerTabs.vue";
+
 export default {
   name: "UserCard",
+  components: {CustomerTabs, AddressCardDialog},
+  beforeRouteEnter(to,from,next){
+    next(v=>{
+      if (to.params.code) {
+        v.$store.dispatch('UserManagement/getCustomer',helpers.decrypt(to.params.code))
+      }
+    })
+  },
   data: ()=>({
     isView:false,
     menu: false,
     submitting:false,
     isValid: false,
     isImageSaved: false,
-    imageError:"",
+    addAddress:false,
+    //
     dialog: false,
     formData: {
       first_name:"",
@@ -167,6 +190,16 @@ export default {
       },
     ],
   }),
+  mounted() {
+    if (this.$route.params.code) {
+      this.isView=true
+    }
+  },
+  computed:{
+    customer(){
+      return this.$store.getters['UserManagement/UserGetter']('customer')
+    }
+  },
   methods: {
     //
     save() {
@@ -178,6 +211,14 @@ export default {
         this.dialog=false
       }
     },
+    closeAddressDialog(val){
+      this.addAddress=val
+    }
+  },
+  watch: {
+    customer: function  (newValue){
+      this.formData = newValue.user
+    }
   }
 }
 </script>

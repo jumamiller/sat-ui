@@ -1,6 +1,14 @@
 import moment from "moment";
+const AlgorithmKey="SolutechLimited"
 
 class Helpers {
+    encrypt(value) {
+        return btoa(AlgorithmKey + value)
+    }
+    decrypt(value) {
+        let str=atob(value)
+        return str.replace(AlgorithmKey,'');
+    }
     uploadImage(fileInput) {
         if (fileInput) {
             return new Promise((resolve, reject) => {
@@ -14,9 +22,6 @@ class Helpers {
             // do nothing
         }
     }
-    removeTags(str) {
-        return str.replace(/(<([^>]+)>)/ig, '')
-    }
     formatCurrency(val) {
         const formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -26,39 +31,6 @@ class Helpers {
     }
     formatDate(date) {
         return moment(date).format('MMMM Do YYYY, h:mm:ss a')
-    }
-    removeBlankAttributes(obj){
-        return Object.fromEntries(
-            Object.entries(obj).filter(([, value]) => value)
-        );
-    }
-
-    /**
-     * Download Excel version of the report
-     */
-    downloadExcelReport(name,response) {
-        const fileName = `${name}.xlsx`
-        const url = window.URL.createObjectURL(new Blob([response]))
-        console.log(url)
-        const link = document.createElement('a')
-        link.href = url
-        console.log(url)
-        link.setAttribute('download', fileName)
-        document.body.appendChild(link)
-        link.click()
-    }
-    downloadCSVData(name,csvdata) {
-        //
-        try{
-            const blob = new Blob([csvdata], { type: "text/csv" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = name+".csv";
-            link.click();
-        } catch (e) {
-            console.log(e)
-        }
-        //
     }
 
 
