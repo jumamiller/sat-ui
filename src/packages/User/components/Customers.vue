@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-card>
       <v-card-title>
-        <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
+        <v-btn  @click="$router.back()" class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
         <v-btn class="primary" @click="dialog=true"><v-icon>mdi-plus</v-icon>Add New</v-btn>
       </v-card-title>

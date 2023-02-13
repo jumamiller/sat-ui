@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
+        <v-btn  @click="$router.back()" class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
         <v-btn class="primary" @click="makeOrder"><v-icon>mdi-send</v-icon>
           {{ isView? 'Save' :'Make An Order' }}</v-btn>
