@@ -35,6 +35,11 @@
             </span>
           </template>
           <!--END status-->
+          <!--BEGIN allocate-->
+          <template v-slot:item.allocate="item">
+            <v-btn v-if="item.item.fleet==null" @click="openDialog(item)" small depressed color="primary"><v-icon small>mdi-circle-edit-outline</v-icon>Allocate</v-btn>
+          </template>
+          <!--END allocate-->
           <!--BEGIN action-->
           <template v-slot:item.action="item">
             <v-btn @click="redirectToCard(item)" small depressed rounded color="success"><v-icon>mdi-eye</v-icon>view</v-btn>
@@ -43,6 +48,44 @@
         </v-data-table>
       </v-card-text>
     </v-card>
+    <!--Allocate vehicle dialog-->
+    <v-dialog
+        transition="dialog-bottom-transition"
+        max-width="600"
+        v-model="dialog"
+    >
+      <template>
+        <v-card>
+          <v-toolbar color="primary" dark>Allocate Vehicle</v-toolbar>
+          <v-card-text>
+            <v-alert>To allocate vehicle, they have to registered as on the fleets management section.</v-alert>
+            <v-divider class="mt-3"/>
+            <div>
+              <v-form v-model="isValid" ref="CustomerForm">
+                <v-select
+                    label="Select Vehicle*"
+                    v-model="formData.fleet_id"
+                    prepend-icon="mdi-account"
+                    dense
+                    required
+                    @copy.prevent
+                    @paste.prevent
+                    :rules="[rules.required]"
+                    :items="fleet"
+                    :item-text="item=>item.registration_number"
+                    :item-value="item=>item.id"
+                ></v-select>
+              </v-form>
+            </div>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn color="error" text @click="dialog = false">Close</v-btn>
+            <v-btn color="success" small @click="updateOrder">Submit</v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
+    <!--add allocate vehicle dialog-->
   </v-container>
 </template>
 
@@ -53,17 +96,17 @@ export default {
   beforeRouteEnter(to,from,next){
     next(v=>{
       v.$store.dispatch('OrderManagement/getOrders');
+      v.$store.dispatch('FleetManagement/getFleet');
     })
   },
   data: () => ({
     dialog: false,
     isValid: false,
     formData:{
-      title:"",
-      description:"",
-      website_url:"",
-      attachment:""
+      id:"",
+      fleet_id:""
     },
+    selectedOrder:{},
     rules: {
       required: value => !!value || 'Required!',
     },
@@ -99,6 +142,12 @@ export default {
         value: 'status'
       },
       {
+        text: 'Allocate Vehicle',
+        align: '',
+        sortable: true,
+        value: 'allocate'
+      },
+      {
         text: 'Actions',
         align: '',
         sortable: true,
@@ -109,7 +158,10 @@ export default {
   computed:{
     orders(){
       return this.$store.getters['OrderManagement/OrderGetter']("orders")
-    }
+    },
+    fleet(){
+      return this.$store.getters['FleetManagement/FleetGetter']("fleet")
+    },
   },
   methods: {
     helpers() {
@@ -118,6 +170,17 @@ export default {
     //
     redirectToCard({item}){
       this.$router.push({name:"OrderCard",params:{code:this.helpers().encrypt(item.id)}})
+    },
+    updateOrder(){
+      this.dialog=true
+      this.formData.id=this.selectedOrder.id
+      if (this.formData.fleet_id) {
+        this.$store.dispatch('OrderManagement/updateOrder', { ...this.formData});
+      }
+    },
+    openDialog({item}){
+      this.selectedOrder=item;
+      this.dialog=true
     },
   }
 }

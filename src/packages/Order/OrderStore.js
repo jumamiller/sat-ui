@@ -92,5 +92,32 @@ export default {
                     EventBus.$emit("ApiError", err.response.data.message);
                 })
         },
+        /**
+         * Update
+         * @param commit
+         * @param dispatch
+         * @param payload
+         */
+        updateOrder({commit,dispatch},payload) {
+            commit("Dashboard/SET_LOADING",true,{root:true})
+            call('patch', OrderConstants.ORDER(payload.id),payload)
+                .then(res=> {
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    if (res.data.success) {
+                        EventBus.$emit("ApiSuccess", res.data.message);
+                        //
+                        setTimeout(()=>{
+                            dispatch("getOrders")
+                        },1500)
+                    }
+                    else{
+                        EventBus.$emit("ApiError", res.data.message);
+                    }
+                })
+                .catch(err=>{
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    EventBus.$emit("ApiError", err.response.data.message);
+                })
+        },
     }
 }

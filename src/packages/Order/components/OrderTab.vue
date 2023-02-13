@@ -15,7 +15,7 @@
                 color="basil"
                 flat
             >
-              <v-card-text>
+              <v-card-text v-if="order && order.fleet">
                 <OrderDriver :driver="order.fleet.driver"/>
               </v-card-text>
             </v-card>

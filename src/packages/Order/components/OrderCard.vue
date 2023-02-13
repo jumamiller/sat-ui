@@ -27,21 +27,20 @@
                   :item-value="item=>item.id"
               ></v-select>
             </v-col>
-            <v-col cols="12" sm="6" md="6">
-              <v-select
-                  label="Vehicle"
-                  v-model="formData.fleet_id"
-                  prepend-icon="mdi-mailbox"
-                  dense
-                  required
-                  :items="fleet"
-                  :rules="[rules.required]"
-                  :item-text="item=>item.registration_number"
-                  :item-value="item=>item.id"
-              ></v-select>
-            </v-col>
+<!--            <v-col cols="12" sm="6" md="6">-->
+<!--              <v-select-->
+<!--                  label="Vehicle"-->
+<!--                  v-model="formData.fleet_id"-->
+<!--                  prepend-icon="mdi-mailbox"-->
+<!--                  dense-->
+<!--                  required-->
+<!--                  :items="fleet"-->
+<!--                  :item-text="item=>item.registration_number"-->
+<!--                  :item-value="item=>item.id"-->
+<!--              ></v-select>-->
+<!--            </v-col>-->
 
-            <v-col cols="12" sm="6" md="6">
+            <v-col cols="12" sm="6" md="6" class="mt-n3">
               <v-text-field
                   label="Order Total Amount (Assume customer had selected items)*"
                   required
@@ -51,19 +50,18 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" sm="6" md="6">
-              <v-select
-                  label="Status"
-                  v-model="formData.status"
-                  prepend-icon="mdi-state-machine"
-                  dense
-                  required
-                  :items="statuses"
-                  :rules="[rules.required]"
-                  :item-text="item=>item.name"
-                  :item-value="item=>item.value"
-              ></v-select>
-            </v-col>
+<!--            <v-col cols="12" sm="6" md="6">-->
+<!--              <v-select-->
+<!--                  label="Status"-->
+<!--                  v-model="formData.status"-->
+<!--                  prepend-icon="mdi-state-machine"-->
+<!--                  dense-->
+<!--                  readonly-->
+<!--                  :items="statuses"-->
+<!--                  :item-text="item=>item.name"-->
+<!--                  :item-value="item=>item.value"-->
+<!--              ></v-select>-->
+<!--            </v-col>-->
 
           </v-row>
         </v-form>
@@ -110,7 +108,7 @@ export default {
       customer_id:"",
       fleet_id:"",
       total_price:"",
-      status:""
+      status:"PENDING"
     },
     rules: {
       required: value => !!value || 'Required!',
