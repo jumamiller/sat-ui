@@ -136,7 +136,7 @@ export default {
                         EventBus.$emit("ApiSuccess", res.data.message);
                         //
                         setTimeout(()=>{
-                            window.location.href="/dashboard/fleet-management"
+                            window.location.href="/dashboard/fleet-management/listing"
                         },1500)
                     }
                     else{
