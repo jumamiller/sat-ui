@@ -122,6 +122,33 @@ export default {
                 })
         },
         /**
+         *
+         * @param commit
+         * @param dispatch
+         * @param payload
+         */
+        removeVehicle({commit},payload) {
+            commit("Dashboard/SET_LOADING",true,{root:true})
+            call('delete', FleetConstants.FLEET_DETAILS(payload))
+                .then(res=> {
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    if (res.data.success) {
+                        EventBus.$emit("ApiSuccess", res.data.message);
+                        //
+                        setTimeout(()=>{
+                            window.location.href="/dashboard/fleet-management"
+                        },1500)
+                    }
+                    else{
+                        EventBus.$emit("ApiError", res.data.message);
+                    }
+                })
+                .catch(err=>{
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    EventBus.$emit("ApiError", err.response.data.message);
+                })
+        },
+        /**
          * Drivers
          * @param commit
          */

@@ -4,8 +4,8 @@
       <v-card-title>
         <v-btn  @click="$router.back()" class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
-        <v-btn class="primary" @click="isView ? updateFleet() : save()"><v-icon>mdi-send</v-icon>
-          {{ isView? 'Save' :'Submit' }}</v-btn>
+        <v-btn v-if="isView" class="error" @click="removeFleet"><v-icon>mdi-delete</v-icon>Delete</v-btn>&nbsp;&nbsp;
+        <v-btn class="primary" @click="isView ? updateFleet() : save()"><v-icon>mdi-send</v-icon>{{ isView? 'Save' :'Submit' }}</v-btn>
       </v-card-title>
       <v-divider/>
       <v-card-text>
@@ -47,6 +47,7 @@
               <v-text-field
                   label="Year of Manufacture*"
                   required
+                  type="number"
                   :rules="[rules.required]"
                   v-model="formData.year"
               ></v-text-field>
@@ -55,6 +56,7 @@
               <v-text-field
                   label="Capacity*"
                   required
+                  type="number"
                   :rules="[rules.required]"
                   v-model="formData.capacity"
               ></v-text-field>
@@ -192,6 +194,15 @@ export default {
         this.$store.dispatch('FleetManagement/updateFleet', { ...this.formData});
         this.dialog=false
       }
+    },
+    removeFleet() {
+      this.$confirm.show({
+        title:"Are you Sure?",
+        text:"You are about to delete this vehicle. The process is irreversible!",
+        onConfirm: ()=>{
+          this.$store.dispatch("FleetManagement/removeVehicle",helpers.decrypt(this.$route.params.code))
+        }
+      })
     },
     closeAddressDialog(val){
       this.addAddress=val

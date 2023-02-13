@@ -1,4 +1,4 @@
-# breezy
+# Solutech
 
 ## Project setup
 ```

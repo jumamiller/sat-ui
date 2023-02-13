@@ -103,6 +103,33 @@ export default {
          * @param dispatch
          * @param payload
          */
+        removeCustomer({commit},payload) {
+            commit("Dashboard/SET_LOADING",true,{root:true})
+            call('delete', UserConstants.CUSTOMER(payload))
+                .then(res=> {
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    if (res.data.success) {
+                        EventBus.$emit("ApiSuccess", res.data.message);
+                        //
+                        setTimeout(()=>{
+                            window.location.href="/dashboard/user-management/customers"
+                        },1500)
+                    }
+                    else{
+                        EventBus.$emit("ApiError", res.data.message);
+                    }
+                })
+                .catch(err=>{
+                    commit("Dashboard/SET_LOADING",false,{root:true})
+                    EventBus.$emit("ApiError", err.response.data.message);
+                })
+        },
+        /**
+         *
+         * @param commit
+         * @param dispatch
+         * @param payload
+         */
         addCustomerAddress({commit,dispatch},payload) {
             commit("Dashboard/SET_LOADING",true,{root:true})
             call('post', UserConstants.ADDRESS,payload)

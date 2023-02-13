@@ -4,6 +4,7 @@
       <v-card-title>
         <v-btn class="error"><v-icon>mdi-arrow-left</v-icon>Go Back</v-btn>
         <v-spacer/>
+        <v-btn v-if="isView" class="error" @click="removeCustomer"><v-icon>mdi-delete</v-icon> Remove</v-btn>&nbsp;&nbsp;
         <v-btn v-if="isView" class="success" @click="addAddress=true"><v-icon>mdi-plus</v-icon> Add Address</v-btn>
         &nbsp; &nbsp; &nbsp;
         <v-btn class="primary" @click="save"><v-icon>mdi-send</v-icon>
@@ -216,6 +217,15 @@ export default {
         this.$store.dispatch('UserManagement/addUser', { ...this.formData});
         this.dialog=false
       }
+    },
+    removeCustomer(){
+      this.$confirm.show({
+        title:"Are you Sure?",
+        text:"You are about to delete this customer. The process is irreversible!",
+        onConfirm: ()=>{
+          this.$store.dispatch("UserManagement/removeCustomer",helpers.decrypt(this.$route.params.code))
+        }
+      })
     },
     closeAddressDialog(val){
       this.addAddress=val
