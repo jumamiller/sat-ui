@@ -1,5 +1,15 @@
 # Solutech
 
+## Requirements
+Node 16 (18 and above may fail)
+
+## Environment URLS
+On the env, we have the base URL. Everytime you change a value, restart
+your app. i.e 
+```bash 
+npm run serve
+```
+
 ## Project setup
 ```
 npm install
