@@ -22,7 +22,7 @@ const UserRoutes =[
                 meta: { middleware: [Auth]}
             },
             {
-                path: 'customers/card/:code?',
+                path: 'users/card/:code?',
                 component: UserCard,
                 name: "UserCard",
                 meta: { middleware: [Auth]}

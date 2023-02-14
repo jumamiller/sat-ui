@@ -15,6 +15,14 @@ export default {
             value: 0,
         },
         {
+            to: "/dashboard/user-management/users/card",
+            order: 3,
+            icon: "mdi-plus",
+            title: "Add New",
+            disabled: false,
+            value: 0,
+        },
+        {
             to: "/dashboard/user-management/customers",
             order: 3,
             icon: "mdi-account-group",
